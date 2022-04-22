@@ -1,4 +1,4 @@
-#include "Database.h"
+#include"Database.h"
 
 const size_t BUFF_SIZE = 1024;
 
@@ -68,7 +68,7 @@ const String& Database::getCurrentUser() const
 void Database::registerUser()
 {
 	bool stop = false;
-	while (!stop )
+	while (!stop)
 	{
 		std::cout << "To register, type in your creditentials in the following format: 'email' 'username' 'password'" << std::endl;
 		std::cout << "> ";
@@ -99,7 +99,7 @@ void Database::registerUser()
 
 			usersFile.open("users.hangman", std::ios::app);
 			usersFile << users.back()->getEmail() << ' ' << users.back()->getUsername() << ' '
-					  << users.back()->getPassword() << ' ' << users.back()->getWins() << std::endl;
+				<< users.back()->getPassword() << ' ' << users.back()->getWins() << std::endl;
 
 			std::cout << std::endl << username << " registered successfuly!" << std::endl;
 			stop = true;
@@ -131,41 +131,60 @@ void Database::logIn()
 
 void Database::forgotPassword()
 {
-	bool success = false;
-	while (!success)
+	bool stop = false;
+	while (!stop)
 	{
 		std::cout << "Please, input your username and email seperated by a space:" << std::endl;
-		std::cout << ">";
+		std::cout << "> ";
 		String user, email;
-		std::cin >> user >> email;
-		User* temp = findUserByUsername(user);
-		if (temp == nullptr)
-			std::cout << "Invalid username!" << std::endl;
-		else if (temp->getEmail() != email)
-			std::cout << "Email and username do not match!" << std::endl;
+		std::cin >> user;
+		if (user == "cancel")
+		{
+			stop = true;
+			std::cout << std::endl << "Changing password canceled." << std::endl << std::endl;
+			std::cin.ignore();
+		}
 		else
 		{
-			String pass1, pass2;
-
-			bool success = false;
-			while (!success)
+			std::cin >> email;
+			User* temp = findUserByUsername(user);
+			if (temp == nullptr)
+				std::cout << "Invalid username!" << std::endl;
+			else if (temp->getEmail() != email)
+				std::cout << "Email and username do not match!" << std::endl;
+			else
 			{
-				std::cout << "Input new password:" << std::endl;
-				std::cout << ">";
-				std::cin >> pass1;
-				std::cout << "Confirm new password:" << std::endl;
-				std::cout << ">";
-				std::cin >> pass2;
-				if (pass1 != pass2)
+				String pass1, pass2;
+
+				stop = false;
+				while (!stop)
 				{
-					std::cout << "Passwords did not match!";
+					std::cout << "Input new password:" << std::endl;
+					std::cout << "> ";
+					std::cin >> pass1;
+					if (pass1 == "cancel")
+					{
+						stop = true;
+						std::cout << std::endl << "Changing password canceled." << std::endl << std::endl;
+						std::cin.ignore();
+					}
+					else
+					{
+						std::cout << "Confirm new password:" << std::endl;
+						std::cout << "> ";
+						std::cin >> pass2;
+						if (pass1 != pass2)
+							std::cout << "Passwords did not match! Try again or type 'cancel' to return." << std::endl;
+						else
+						{
+							stop = true;
+							std::cout << std::endl << "Password sucessfully changed!" << std::endl << std::endl;
+							std::cin.ignore();
+						}
+					}
 				}
-				else
-					success = true;
 			}
-			std::cout << "Password sucessfully changed!";
 		}
-			
 	}
 }
 
@@ -196,8 +215,6 @@ void Database::loadDatabase()
 			break;
 		users.push_back(new User(email, username, password, wins));
 	}
-
-	std::cout << "Database successfully loaded!";
 }
 
 void Database::saveDatabase()
@@ -213,7 +230,7 @@ void Database::saveDatabase()
 		file << users[i]->getEmail() << ' ' << users[i]->getUsername() << ' ';
 		file << users[i]->getPassword() << ' ' << users[i]->getWins() << std::endl;
 	}
-	
+
 	try
 	{
 		secureFile("users.hangman");
@@ -228,10 +245,8 @@ void Database::saveDatabase()
 		throw std::exception("Error! Could not delete old database file!");
 
 	state = rename("users_temp.hangman", "users.hangman");
-	if(state != 0)
+	if (state != 0)
 		throw std::exception("Error! Could not rename temp file! Close any files from the game directory!");
-
-	std::cout << "Database successfully saved!";
 }
 
 void Database::showLeaderboard()

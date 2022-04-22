@@ -50,7 +50,7 @@ void System::activate()
 					}
 					else if (command == "submit word")
 					{
-						std::cout << "Enter the word you woyld like to submit:";
+						std::cout << "Enter the word you would like to submit:";
 						String word;
 						std::cin >> word;
 						std::cout << "Are you sure you want to submit the word '" << word << "'? [Y/N]";
@@ -66,7 +66,6 @@ void System::activate()
 					}
 					else if (command == "log out")
 					{
-
 						break;
 					}
 					else

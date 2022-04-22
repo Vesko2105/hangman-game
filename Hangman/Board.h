@@ -1,11 +1,11 @@
 #pragma once
-#include"String.h"
+#include<string.h>
 #include<iostream>
 class Board
 {
 private:
 	unsigned short phase;
-	String phases[10] = {
+	std::string phases[10] = {
 							"\n \n \n \n \n \n                     ___________\n\n--------------------Letters Left--------------------",
 							"\n                    | \n                    | \n                    | \n                    | \n                    | \n                    |___________\n\n--------------------Letters Left--------------------",
 							"                     ___________\n                    | \n                    | \n                    | \n                    | \n                    | \n                    |___________\n\n--------------------Letters Left--------------------",

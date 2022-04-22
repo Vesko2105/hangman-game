@@ -1,17 +1,10 @@
 ﻿#include<iostream>
-#include"GameSession.h"
+#include"User.h"
 
 int main()
 {
-	GameSession g;
-	g.loadSavedGame("vesko01_947.hangman");
-	try
-	{
-		g.createNewGame("testche");
-	}
-	catch (std::exception e)
-	{
-		std::cout << e.what();
-	}
-	g.enterGameMenu("vesko01");
+	User user = User("email", "name", "pass", 0);
+	int a;
+	std::cin >> a;
+	std::cout << user.getEmail();
 }

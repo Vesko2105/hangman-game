@@ -28,9 +28,9 @@ size_t User::getWins() const
 	return wins;
 }
 
-void User::setPassword(const String& newPass)
+void User::setPassword(const String& password)
 {
-	password = newPass;
+	this->password = password;
 }
 
 void User::addWin(const size_t& x)

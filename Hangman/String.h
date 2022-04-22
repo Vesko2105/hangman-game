@@ -7,10 +7,9 @@ private:
 	char* data;
 	size_t size;
 
+	void resize(size_t);
 	void copy(const String&);
-	void copy(const char*);
 	void free();
-
 public:
 	String();
 	String(const char*);
@@ -18,45 +17,30 @@ public:
 	~String();
 
 	const char* getData() const;
-	size_t getSize() const;
 
-	const String& get(const String&, size_t, char);
-
-	int contains(const String&) const;
-	int contains(char) const;
-
-	const String substring(size_t index) const;
-	const String substring(size_t beg, size_t end) const;
-
-	const String& reverse(String&);
-
+	bool contains(const char*);
+	const char* getStartingFrom(size_t index);
+	const char* getInterval(size_t beg, size_t end);
 	const String& operator=(const String&);
 	const String& operator=(const char*);
-	const String& operator=(char);
-
+	const String operator*(size_t k);
 	char& operator[](size_t index);
-	const char& operator[](size_t index) const;
 };
 
-String operator*(const String&, size_t);
-String operator+(const String&, const String&);
-String operator+(const String&, char);
-const String& operator+=(String&, const String&);
-const String& operator+=(String&, char);
+size_t stringLen(const char*);
+void stringCopy(char*, const char*);
+void stringCopy(char*, const char*, size_t);
+bool stringCompare(const char* str1, const char* str2);
+
+const String& operator+(const String& lhs, const String& rhs);
+const String& operator+=(String& lhs, const String& rhs);
 
 std::ostream& operator<<(std::ostream& os, const String& str);
-std::istream& operator>>(std::istream& is, String& str);
+std::istream& operator>>(std::ostream& is, String& str);
 
-bool operator==(const String&, const String&);
-bool operator==(const String&, const char*);
-bool operator==(const char*, const String&);
-bool operator!=(const String&, const String&);
-bool operator!=(const String&, const char*);
-bool operator!=(const char*, const String&);
+bool operator==(const String& lhs, const String& rhs);
+bool operator!=(const String& lhs, const String& rhs);
 bool operator>=(const String& lhs, const String& rhs);
 bool operator>(const String& lhs, const String& rhs);
 bool operator<=(const String& lhs, const String& rhs);
 bool operator<(const String& lhs, const String& rhs);
-
-const String getReversed(const String&);
-const String intToString(int x);

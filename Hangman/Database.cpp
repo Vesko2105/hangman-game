@@ -9,8 +9,21 @@ void secureFile(const char* fileName)
 	{
 		throw std::exception("Error! Could not access file!");
 	}
+	file.close();
 }
 
+
+Database::Database()
+{
+	try
+	{
+		loadDatabase();
+	}
+	catch (const std::exception& e)
+	{
+		throw e;
+	}
+}
 
 Database::~Database()
 {
@@ -54,48 +67,65 @@ const String& Database::getCurrentUser() const
 
 void Database::registerUser()
 {
-	bool success = false;
-	while (!success)
+	bool stop = false;
+	while (!stop )
 	{
-		std::cout << "To register, type in your creditentials in the following format: \"email\" \"username\" \"password\"";
-		std::cout << std::endl << "---> ";
-		String email, username, password;
+		std::cout << "To register, type in your creditentials in the following format: 'email' 'username' 'password'" << std::endl;
+		std::cout << "> ";
+		String email, username, password, command;
 		std::cin >> email >> username >> password;
 		if (findUserByEmail(email) != nullptr)
 		{
-			std::cout << "Error! User with that email address already exists!" << std::endl;
+			throw std::exception("Error! User with that email address already exists!");
 		}
 		else if (findUserByUsername(email) != nullptr)
 		{
-			std::cout << "Error! User with that username already exists!" << std::endl;
+			throw std::exception("Error! User with that username already exists!");
 		}
 		else
 		{
-			users.push_back(new User(email, username, password, 0));
-			success = true;
-		}
+			try
+			{
+				secureFile("users.hangman");
+			}
+			catch (const std::exception& e)
+			{
+				throw e;
+			}
 
+			users.push_back(new User(email, username, password, 0));
+
+			std::ofstream usersFile;
+
+			usersFile.open("users.hangman", std::ios::app);
+			usersFile << users.back()->getEmail() << ' ' << users.back()->getUsername() << ' '
+					  << users.back()->getPassword() << ' ' << users.back()->getWins() << std::endl;
+
+			std::cout << std::endl << username << " registered successfuly!" << std::endl;
+			stop = true;
+		}
 	}
 }
 
 void Database::logIn()
 {
-	std::cout << "Please enter your username and password separated by a \" \" ---> ";
-	String user, password;
-	std::cin >> user >> password;
+	std::cout << std::endl << "Please enter your username and password separated by an empty space:" << std::endl;
+	std::cout << "> ";
+	String username, password;
+	std::cin >> username >> password;
 
-	User* login = findUserByUsername(user);
+	User* user = findUserByUsername(username);
 
-	if (login == nullptr)
+	if (user == nullptr)
 		throw std::exception("Could not find username in the system!");
 
-	else if (login->getPassword() != password)
+	else if (user->getPassword() != password)
 		throw std::exception("Incorrect password!");
 
 	else
 	{
-		std::cout << "Login successfull!" << std::endl;
-		loggedIn = login;
+		std::cout << std::endl << "Login successfull! Welcome " << username << '!' << std::endl << std::endl;
+		loggedIn = user;
 	}
 }
 
@@ -104,7 +134,8 @@ void Database::forgotPassword()
 	bool success = false;
 	while (!success)
 	{
-		std::cout << "Please, input your username and email ---> ";
+		std::cout << "Please, input your username and email seperated by a space:" << std::endl;
+		std::cout << ">";
 		String user, email;
 		std::cin >> user >> email;
 		User* temp = findUserByUsername(user);
@@ -114,16 +145,25 @@ void Database::forgotPassword()
 			std::cout << "Email and username do not match!" << std::endl;
 		else
 		{
-
-			std::cout << "Input new password and confirm it a second time ---> ";
 			String pass1, pass2;
-			std::cin >> pass1 >> pass2;
-			while (!(pass1==pass2))
+
+			bool success = false;
+			while (!success)
 			{
-				std::cout << "Passwords did not match! Try again ---> ";
-				std::cin >> pass1 >> pass2;
+				std::cout << "Input new password:" << std::endl;
+				std::cout << ">";
+				std::cin >> pass1;
+				std::cout << "Confirm new password:" << std::endl;
+				std::cout << ">";
+				std::cin >> pass2;
+				if (pass1 != pass2)
+				{
+					std::cout << "Passwords did not match!";
+				}
+				else
+					success = true;
 			}
-			std::cout << "password sucessfully changed!";
+			std::cout << "Password sucessfully changed!";
 		}
 			
 	}
@@ -144,7 +184,6 @@ void Database::loadDatabase()
 	if (!file.is_open())
 		throw std::exception("Error! Could not access database file!");
 
-	size_t currUser = 0;
 	while (!file.eof())
 	{
 		String email;
@@ -153,7 +192,8 @@ void Database::loadDatabase()
 		size_t wins;
 
 		file >> email >> username >> password >> wins;
-
+		if (email == "")
+			break;
 		users.push_back(new User(email, username, password, wins));
 	}
 
@@ -199,7 +239,7 @@ void Database::showLeaderboard()
 	;
 }
 
-void Database::addWordToBank()
+void Database::addWordToBank(String& word)
 {
-	WordBank::addNewWord();
+	//addNewWord(word);
 }

@@ -1,9 +1,11 @@
 #pragma once
+
 #include"User.h"
 #include"WordBank.h"
 #include<fstream>
 #include<iostream>
 #include<vector>
+
 class Database
 {
 private:
@@ -11,8 +13,7 @@ private:
 	User* loggedIn;
 
 public:
-	Database(const Database&) = delete;
-	const Database& operator=(const Database&) = delete;
+	Database();
 	~Database();
 
 	User* findUserByEmail(const String&);
@@ -26,6 +27,6 @@ public:
 	void loadDatabase();
 	void saveDatabase();
 	void showLeaderboard();
-	void addWordToBank();
+	void addWordToBank(String& word);
 };
 

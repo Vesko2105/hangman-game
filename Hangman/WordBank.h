@@ -1,14 +1,21 @@
 #pragma once
 #include<vector>
+#include<fstream>
+#include <stdlib.h>
+#include <time.h>  
 #include"String.h"
 class WordBank
 {
 private:
-	static std::vector<String> words;
+	std::vector<String> words;
 
+	bool secureFile();
 	void loadWordsFromFile();
-	bool validateWord();
 public:
-	static void addNewWord();
+	WordBank();
+
+	void printWords();
+	void addNewWord(String newWord);
+	String getRandomWord();
 };
 

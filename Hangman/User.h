@@ -2,7 +2,7 @@
 #include"String.h"
 class User
 {
-private:
+private:	
 	String email;
 	String username;
 	String password;
@@ -18,4 +18,5 @@ public:
 
 	void setPassword(const String&);
 	void addWin(const size_t&);
+	String toString();
 };

@@ -1,6 +1,6 @@
 #include "Board.h"
 
-Board::Board():phase(0)
+Board::Board() :phase(0)
 {
 	;
 }

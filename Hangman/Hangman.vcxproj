@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{5501c582-9428-4e2b-b33f-bbe35e271e28}</ProjectGuid>
+    <ProjectGuid>{d8a82652-c4dc-4a60-a74a-77d3dcceb331}</ProjectGuid>
     <RootNamespace>Hangman</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
